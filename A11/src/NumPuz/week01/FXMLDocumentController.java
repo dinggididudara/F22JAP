@@ -1,6 +1,6 @@
-package CST8221.week01;
+package NumPuz.week01;
 
-/* CST8221-JAP: LAB 01, Example 6SFXCSS
+/* NumPuz-JAP: LAB 01, Example 6SFXCSS
 File name: FXMLDocumentController.java
 */
 

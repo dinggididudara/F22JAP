@@ -1,6 +1,6 @@
-package CST8221.week01;
+package NumPuz.week01;
 
-/* CST8221-JAP: LAB 01, Example 4
+/* NumPuz-JAP: LAB 01, Example 4
 File name: SimpleJavaFXGUIe4.java
 This example shows a simple JavaFX GUI application.
 You need Java 1.8.XX to compile and run this example.

@@ -1,6 +1,6 @@
-package CST8221.week01;
+package NumPuz.week01;
 
-/* CST8221-JAP: LAB 01, Example 3
+/* NumPuz-JAP: LAB 01, Example 3
 File name: SimpleSwingGUIe3.java
 */
 //using specific imports

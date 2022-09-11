@@ -1,8 +1,8 @@
-package CST8221;
+package NumPuz;
 
 import javax.swing.JOptionPane;
 
-import CST8221.hybrid.Week01.HelloJFX;
+import NumPuz.hybrid.Week01.HelloJFX;
 
 public class Week00_Hybrid {
 

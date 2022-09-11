@@ -1,6 +1,6 @@
-package CST8221.week01;
+package NumPuz.week01;
 
-/* CST8221-JAP: LAB 01, Example 5SFX
+/* NumPuz-JAP: LAB 01, Example 5SFX
 File name: SwingJavaFX.java
 */
 import javafx.application.Application;

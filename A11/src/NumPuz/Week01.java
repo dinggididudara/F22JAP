@@ -1,15 +1,15 @@
-package CST8221;
+package NumPuz;
 
 import javax.swing.JOptionPane;
 
-import CST8221.week01.FXMLCSSButton;
-import CST8221.week01.SimpleJavaFXGUIe4;
-import CST8221.week01.SimpleSwingGUIe1;
-import CST8221.week01.SimpleSwingGUIe2;
-import CST8221.week01.SimpleSwingGUIe2R;
-import CST8221.week01.SimpleSwingGUIe3;
-import CST8221.week01.SimpleSwingGUIe3L;
-import CST8221.week01.SwingJavaFX;
+import NumPuz.week01.FXMLCSSButton;
+import NumPuz.week01.SimpleJavaFXGUIe4;
+import NumPuz.week01.SimpleSwingGUIe1;
+import NumPuz.week01.SimpleSwingGUIe2;
+import NumPuz.week01.SimpleSwingGUIe2R;
+import NumPuz.week01.SimpleSwingGUIe3;
+import NumPuz.week01.SimpleSwingGUIe3L;
+import NumPuz.week01.SwingJavaFX;
 
 public class Week01 {
 

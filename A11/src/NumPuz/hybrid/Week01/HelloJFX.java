@@ -1,4 +1,4 @@
-package CST8221.hybrid.Week01;
+package NumPuz.hybrid.Week01;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;

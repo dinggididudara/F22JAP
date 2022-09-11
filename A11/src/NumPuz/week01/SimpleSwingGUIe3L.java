@@ -1,6 +1,6 @@
-package CST8221.week01;
+package NumPuz.week01;
 
-/* CST8221-JAP: LAB 01, Example 3L
+/* NumPuz-JAP: LAB 01, Example 3L
 File name: SimpleSwingGUIe3L.java
 This example shows how to use lambda expressions - a new addition to Java 8.
 You need Java 1.8.XX to compile and run this example.
