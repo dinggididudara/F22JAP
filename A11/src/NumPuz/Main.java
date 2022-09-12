@@ -11,6 +11,7 @@
 package NumPuz;
 
 import javax.swing.JFrame;
+import javax.swing.JButton;
 
 /**
  * Class Name : 
@@ -34,9 +35,13 @@ public class Main extends JFrame {
 		f.setSize(600,400); //size
 		f.setTitle("Number Puzzle"); //set window title
 		f.setResizable(false); //cannot change the window size
-		f.setVisible(true); //appear in the screen, hidden default
 		
-				
+		
+		JButton b = new JButton("button");
+		f.add(b);
+		
+		
+		f.setVisible(true); //appear in the screen, hidden default
 	} //main end
 	/*
 	 * Method name :

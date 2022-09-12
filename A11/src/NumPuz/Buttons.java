@@ -9,6 +9,10 @@
  * Purpose : Number Puzzle - Buttons class
  */
 package NumPuz;
+
+import javax.swing.JFrame;
+import javax.swing.JButton;
+
 /**
  * Class Name : Buttons
  * Methods List :
@@ -19,5 +23,6 @@ package NumPuz;
  *
  */
 public class Buttons {
+	JButton b = new JButton();
 	
 } //Buttons class end
