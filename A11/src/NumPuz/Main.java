@@ -14,13 +14,19 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.Timer;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.TextArea;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Class Name : 
@@ -106,10 +112,32 @@ public class Main extends JFrame {
 		panel2.add(new JLabel("Points: "));
 		panel2.add(new JTextField("0")); //add text field, 0 by default
 		
-		panel2.add(new TextArea("",10,30)); //space for image
+		
+		ImageIcon blankImage = new ImageIcon("C:/Users/dinggididudara/OneDrive/AC/22F/CST8221 Java Application Programming/Soomin113/A11/src/image.png"); //get image from folder
+		
+		JLabel imageLabel = new JLabel(blankImage); //put image into label
+		imageLabel.setIcon(blankImage); //set label to icon
+		panel2.add(imageLabel);
+		
+//		panel2.add(new TextArea("",10,30)); //space for image
 		
 		panel2.add(new JLabel("Time : "));
-		panel2.add(new JTextField("0")); //add text field for time, 0 by default
+		JTextArea timerTextArea = new JTextArea(); //text area for timer
+		timerTextArea.setEditable(false);
+//		panel2.add(new JTextField("0")); //add text field for time, 0 by default
+		ActionListener playButtonListener = new ActionListener() { //action listener for play button
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("it is running now");
+				int time = 0;
+				Timer timer = new Timer();
+//				timer.setRepeats(false);
+				timer.start();
+				time += 1;
+				timerTextArea.append(String.valueOf(time)); // start the timer and add text area in panel
+			}}; //playButtonListener end
+			
 		
 		JButton resetButton = new JButton("Reset");
 		panel2.add(resetButton);
