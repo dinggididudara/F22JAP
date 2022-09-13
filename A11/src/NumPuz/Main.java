@@ -21,12 +21,15 @@ import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 
 /**
  * Class Name : 
@@ -48,7 +51,6 @@ public class Main extends JFrame {
 	 */
 	public static void main(String[] args) {
 		
-//		Main mainFrame = new Main();
 		//frame
 		JFrame f = new JFrame(""); //create frame
 		f.setSize(600,800); //size
@@ -60,16 +62,23 @@ public class Main extends JFrame {
 		JPanel panel1 = new JPanel(); //set panel for numbers
 		
 		panel1.setLayout(new GridLayout(3,3)); //add grid layout to panel 1
-		
-		JButton b1 = new JButton("button1");
-		JButton b2 = new JButton("button2");
-		JButton b3 = new JButton("button3");
-		JButton b4 = new JButton("button4");
-		
-		panel1.add(b1);
-		panel1.add(b2);
-		panel1.add(b3);
-		panel1.add(b4);
+//		panel1.setBackground(Color.black); //set grid color
+		JButton[] buttonArr = new JButton[8]; //button array
+		int[] randomArr = new int[8]; //random number array is zero
+		Random random = new Random(); //random method
+		for(int i=0; i<8; i++) {
+			randomArr[i] = random.nextInt(7)+1; //add random number maximum 9 but no zero
+			for(int j=0;j<i;j++) { //check if has same number
+					if(randomArr[i] == randomArr[j]) {
+						i--;
+					} //if end
+			} //for end
+			buttonArr[i]= new JButton(""+randomArr[i]);
+//			buttonArr[i]= new JButton(""+(i+1));
+		} //if end
+		for(int z=0;z<7;z++) { //add button except the last button for moving
+			panel1.add(buttonArr[z]);
+		}
 		
 		JPanel panel2 = new JPanel(); //second panel for choice box
 //		panel2.setLayout(new GridLayout(8,0));
@@ -110,7 +119,9 @@ public class Main extends JFrame {
 		panel2.add(finishButton);
 		
 		panel2.add(new JLabel("Points: "));
-		panel2.add(new JTextField("0")); //add text field, 0 by default
+		JTextField points = new JTextField("0"); //text field for points, zero by default
+		points.setEditable(false); //user cannot edit this point
+		panel2.add(points); //add text field, 0 by default
 		
 		
 		ImageIcon blankImage = new ImageIcon("C:/Users/dinggididudara/OneDrive/AC/22F/CST8221 Java Application Programming/Soomin113/A11/src/image.png"); //get image from folder
@@ -130,12 +141,12 @@ public class Main extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				System.out.println("it is running now");
-				int time = 0;
-				Timer timer = new Timer();
-//				timer.setRepeats(false);
-				timer.start();
-				time += 1;
-				timerTextArea.append(String.valueOf(time)); // start the timer and add text area in panel
+//				int time = 0;
+//				Timer timer = new Timer();
+////				timer.setRepeats(false);
+//				timer.start();
+//				time += 1;
+//				timerTextArea.append(String.valueOf(time)); // start the timer and add text area in panel
 			}}; //playButtonListener end
 			
 		
