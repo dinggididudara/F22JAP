@@ -29,6 +29,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -54,26 +55,44 @@ import java.util.Random;
  *
  */
 public class GameController extends JFrame{
-	Design design = new Design();
-	int selectedDimension;
-	int selectedLevel;
-	
+//	Design design = new Design();
 	/**
 	 * default serial
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
-	 * GameController()
+	 * GameController : constructor
 	 */
-	GameController(){
+	GameController() {
 		Design design = new Design();
 		
+	} //GameController
+	/**
+	 * 
+	 */
+	static void dialogMessage(int status){
+		JDialog dialog = new JDialog();
+//		dialog.setUndecorated(true);
+		switch(status) {
+		case 0: //if succeed
+			JLabel label1 = new JLabel(new ImageIcon("C:/Users/dinggididudara/OneDrive/AC/22F/CST8221 Java Application Programming/Soomin113/A11/src/gamewinner.png"));
+			dialog.add(label1);
+			break;
+		case 1: //if end
+			JLabel label2 = new JLabel(new ImageIcon("C:/Users/dinggididudara/OneDrive/AC/22F/CST8221 Java Application Programming/Soomin113/A11/src/gameend.png"));
+			dialog.add(label2);
+			break;
+		case -1: //if error
+			JLabel label3 = new JLabel(new ImageIcon("C:/Users/dinggididudara/OneDrive/AC/22F/CST8221 Java Application Programming/Soomin113/A11/src/gameerr.png"));
+			dialog.add(label3);
+			break;
+		} //switch end
 		
 		
-		
-	}
-	
+		dialog.pack();
+		dialog.setVisible(true);
+	} //dialogMessage end
 	} //main end
 	
 

@@ -10,6 +10,9 @@
  */
 package Main;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -52,7 +55,14 @@ public class Design extends JFrame implements ActionListener {
 	JPanel numberPanel = new JPanel();
 	int buttonRow = 0;
 	int buttonCol = 0;
-
+	
+	JMenuItem newMenuItem = new JMenuItem("New");
+	JMenuItem solutionMenuItem = new JMenuItem("Solution");
+	JMenuItem exitMenuItem = new JMenuItem("Exit");
+	
+	JMenuItem colorsMenuItem = new JMenuItem("Colors");
+	JMenuItem aboutMenuItem = new JMenuItem("About");
+	
 	JPanel rightPanel = new JPanel(); // second panel for choice box
 
 	JPanel modePanel = new JPanel(); // panel for mode
@@ -60,16 +70,16 @@ public class Design extends JFrame implements ActionListener {
 	JPanel dimensionPanel = new JPanel(); // panel for Design
 	String[] dimArr = { "3", "4", "5" }; // array for dimension choices
 	JComboBox dimensionComboBox = new JComboBox(dimArr);
-	
+
 	int selectedDimension = dimensionComboBox.getSelectedIndex() + 3;
-	
+
 	JButton[][] buttonArr = new JButton[selectedDimension][selectedDimension];
 	int[][] numArr = new int[selectedDimension][selectedDimension];
 
 	JPanel levelPanel = new JPanel(); // panel for levelComboBox
 	String[] levelArr = { "[Select]", "1", "2", "3" }; // has three levels
 	JComboBox levelComboBox = new JComboBox(levelArr);
-	
+
 	int selectedLevel = levelComboBox.getSelectedIndex() + 3;
 
 	JPanel typePanel = new JPanel(); // panel for typeComboBox
@@ -96,6 +106,10 @@ public class Design extends JFrame implements ActionListener {
 
 	JTextField textField = new JTextField("", 8);// text field for text pad screen, limited 8 length
 
+	JTextArea timerTextArea = new JTextArea("0"); // text area for timer
+	int time = 0; //timer count
+	Timer timer = new Timer();
+
 	ImageIcon frameImageIcon = new ImageIcon(
 			"C:/Users/dinggididudara/OneDrive/AC/22F/CST8221 Java Application Programming/Soomin113/A11/src/N.jpg");
 
@@ -105,7 +119,7 @@ public class Design extends JFrame implements ActionListener {
 	Font font = new Font("Bahnschrift", Font.BOLD, 80);
 	Font font2 = new Font("Bahnschrift", Font.BOLD, 23);
 	Color c = new Color(204, 204, 255); // purple color
-
+	
 	/**
 	 * default Constructor
 	 */
@@ -130,18 +144,38 @@ public class Design extends JFrame implements ActionListener {
 		f.getContentPane().setBackground(Color.white);
 
 		splash.dispose(); // remove splash screen
-		// **********************************************************************menu
-		// bar
-		gameMenu.add(new JMenuItem("New"));
-
+		// **********************************************************************menu bar
+		newMenuItem.setIcon(new ImageIcon("C:/Users/dinggididudara/OneDrive/AC/22F/CST8221 Java Application Programming/Soomin113/A11/src/iconnew.png"));
+		solutionMenuItem.setIcon(new ImageIcon("C:/Users/dinggididudara/OneDrive/AC/22F/CST8221 Java Application Programming/Soomin113/A11/src/iconsol.png"));
+		exitMenuItem.setIcon(new ImageIcon("C:/Users/dinggididudara/OneDrive/AC/22F/CST8221 Java Application Programming/Soomin113/A11/src/iconext.png"));
+		
+		colorsMenuItem.setIcon(new ImageIcon("C:/Users/dinggididudara/OneDrive/AC/22F/CST8221 Java Application Programming/Soomin113/A11/src/iconcol.png"));
+		aboutMenuItem.setIcon(new ImageIcon("C:/Users/dinggididudara/OneDrive/AC/22F/CST8221 Java Application Programming/Soomin113/A11/src/iconabt.png"));
+		
+		gameMenu.add(newMenuItem);
+		gameMenu.add(solutionMenuItem);
+		gameMenu.addSeparator();
+		gameMenu.add(exitMenuItem);
+		
+		helpMenu.add(colorsMenuItem);
+		helpMenu.addSeparator();
+		helpMenu.add(aboutMenuItem);
+		
 		menuBar.add(gameMenu);
 		menuBar.add(helpMenu);
+		
+		newMenuItem.addActionListener(this);
+		solutionMenuItem.addActionListener(this);
+		exitMenuItem.addActionListener(this);
+		
+		colorsMenuItem.addActionListener(this);
+		aboutMenuItem.addActionListener(this);
+		
 		f.setJMenuBar(menuBar);
 		// *****************************************************************************number
 		// panel
 		leftPanel.setLayout(new BorderLayout()); // border layout for left panel
 		leftPanel.add(numberPanel); // add empty number panel
-//		startGame();
 		// **************************************************************************right
 		// panel
 
@@ -165,8 +199,7 @@ public class Design extends JFrame implements ActionListener {
 		modePanel.add(playButton);
 		rightPanel.add(modePanel);
 
-		// ******************************************************************Design
-		// panel
+		// ******************************************************************Design panel
 
 		dimensionPanel.setBorder(new TitledBorder(new LineBorder(Color.BLACK, 3), "Dimension")); // set border for mode
 		dimensionPanel.setBackground(Color.WHITE);
@@ -186,29 +219,7 @@ public class Design extends JFrame implements ActionListener {
 		// panel
 		typePanel.setBorder(new TitledBorder(new LineBorder(Color.BLACK, 3), "Type"));
 
-		typeComboBox.addActionListener(new ActionListener() { // set event for typeComboBox combo box
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				JComboBox cb = (JComboBox) e.getSource(); // get combo box
-				int index = cb.getSelectedIndex(); // get index number that user clicked
-				if (index == 0) { // if choose "Number"
-					startGame();
-				} else if (index == 1) { // if choose "Text"
-					startButton.setEnabled(true);
-					levelComboBox.setEnabled(false); // disable levelComboBox combo box
-					startButton.addActionListener(new ActionListener() {
-
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							designTextPad(); // if click start button, design text pad
-						}
-					});
-				} // if-else end
-			} // actionPerformed end
-
-		});
+		typeComboBox.addActionListener(this);
 		typePanel.setBackground(Color.WHITE);
 		typePanel.add(typeComboBox);
 		rightPanel.add(typePanel);
@@ -254,34 +265,20 @@ public class Design extends JFrame implements ActionListener {
 
 		});
 
-		// ****************************************************************************image
-		// panel
+		// ****************************************************************************image panel
 		imaLabel.setIcon(imageIcon);
 		imagePanel.setBackground(Color.LIGHT_GRAY);
 		imagePanel.add(imaLabel);
 		rightPanel.add(imagePanel);
 
-		// **************************************************************************time
-		// panel
+		// **************************************************************************time panel
 		timePanel.setBorder(new TitledBorder(new LineBorder(Color.BLACK, 3), "Time")); // set border for mode
 		timePanel.setBackground(Color.WHITE);
-		JTextArea timerTextArea = new JTextArea("0"); // text area for timer
+
 		timerTextArea.setEditable(false); // cannot edit this text
-//			ActionListener playButtonListener = new ActionListener() { //action listener for play button
-//				@Override
-//				public void actionPerformed(ActionEvent e) {
-//					// TODO Auto-generated method stub
-//					int time = 0;
-//					Timer timer = new Timer();
-//					timer.setRepeats(false);
-//					timer.start();
-//					time += 1;
-//					timerTextArea.append(String.valueOf(time)); // start the timer and add text area in panel
-//				}}; //playButtonListener end
 		timePanel.add(timerTextArea);
 		rightPanel.add(timePanel);
-		// ******************************************************************start
-		// start button
+		// ******************************************************************start button
 		startButton.setBackground(Color.WHITE);
 		startButton.setFont(font2);
 		startButton.setEnabled(false); // default is 'disabled'
@@ -296,27 +293,9 @@ public class Design extends JFrame implements ActionListener {
 		lastPanel.add(resetButton, "South"); // move reset button to south
 		rightPanel.add(lastPanel);
 
-		resetButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-				
-				selectedDimension = 0;
-				selectedLevel = 0;
+		resetButton.addActionListener(this);
 
-				leftPanel.removeAll();
-				leftPanel.revalidate();
-				leftPanel.repaint();
-
-				numberPanel.removeAll();
-				numberPanel.revalidate();
-				numberPanel.repaint();
-			}
-		});
-
-		// ******************************************************************add to
-		// frame
+		// ******************************************************************add to frame
 		f.add(leftPanel, BorderLayout.CENTER);
 		f.add(rightPanel, BorderLayout.EAST);
 
@@ -326,7 +305,8 @@ public class Design extends JFrame implements ActionListener {
 
 	/**
 	 * Purpose : check dimension and change number pad
-	 * @author 
+	 * 
+	 * @author
 	 */
 	void getRandom() {
 		int d = selectedDimension * selectedDimension;
@@ -356,7 +336,7 @@ public class Design extends JFrame implements ActionListener {
 	} // getRandom end
 
 	/**
-	 * Purpose : Design number pad (default)
+	 * Purpose : Design number pad
 	 * 
 	 * @param
 	 */
@@ -367,7 +347,6 @@ public class Design extends JFrame implements ActionListener {
 					buttonArr[i][j].setText(""); // make empty button
 					buttonArr[i][j].setEnabled(false);
 				} else {
-					
 					buttonArr[i][j].setText(String.valueOf(numArr[i][j] + 1)); // put number in number button
 					buttonArr[i][j].setEnabled(true);
 				} // if-else end
@@ -377,17 +356,15 @@ public class Design extends JFrame implements ActionListener {
 	} // designNumberPad end
 
 	/**
-	 * 
+	 * Purpose : 
 	 */
 	void startGame() {
-		leftPanel.removeAll();
-		leftPanel.revalidate();
-		leftPanel.repaint();
-
+		reset();
 		numberPanel.setBackground(Color.WHITE);
-
-		numberPanel.setLayout(new GridLayout(selectedDimension, selectedDimension, 5, 5));
-
+		if(selectedDimension != 0) {
+			numberPanel.setLayout(new GridLayout(selectedDimension, selectedDimension, 5, 5));
+		}
+		
 		int temp = 1;
 
 		for (int i = 0; i < selectedDimension; i++) {
@@ -401,35 +378,54 @@ public class Design extends JFrame implements ActionListener {
 			} // for end
 		} // for end
 		leftPanel.add(numberPanel, BorderLayout.CENTER); // add number panel to left panel and center it
+		startTimer();
 	} // startGame
+
+	/**
+	 * Purpose : start Timer
+	 */
+	void startTimer() {
+		TimerTask timerT = new TimerTask() {
+			@Override
+			public void run() {
+				timerTextArea.setFont(font2);
+				timerTextArea.setText(String.valueOf(time));
+				time++;
+			}
+		};
+		timer.schedule(timerT, 0, 1000); //start timer and do task
+	}
 
 	/**
 	 * Purpose : design text pad, and get user's input
 	 */
 	void designTextPad() {
-		numberPanel.removeAll();
-		numberPanel.revalidate();
-		numberPanel.repaint();
+		reset();
+//		leftPanel.removeAll();
+//		leftPanel.revalidate();
+//		leftPanel.repaint();
 
-		numberPanel.setLayout(new GridLayout(3, 3, 5, 5));
+//		numberPanel.removeAll();
+//		numberPanel.revalidate();
+//		numberPanel.repaint();
 
 		JPanel textPanel = new JPanel();
 		textPanel.setLayout(new FlowLayout());
 
-		JButton[] textButtonArr = new JButton[9]; // button array
 		JButton enterButton = new JButton("Enter"); // add enter button
 		enterButton.setBackground(Color.WHITE);
 		enterButton.setFont(font2);
+		textField.setText("");//reset text field
 		textPanel.add(textField);
 		textPanel.add(enterButton);
 
 		leftPanel.add(textPanel, BorderLayout.SOUTH);// show text field that can typeComboBox text
-		char[] textArr = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i' }; // text array
-		for (int i = 0; i < 9; i++) {
-			textButtonArr[i] = new JButton("" + textArr[i]);
-			textButtonArr[i].setBackground(Color.WHITE);
-			numberPanel.add(textButtonArr[i]).setFont(font);
-		} // for end
+//		char[] textArr = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i' }; // text array
+//		for (int i = 0; i < 9; i++) {
+//			textButtonArr[i] = new JButton("" + textArr[i]);
+//			textButtonArr[i].setBackground(Color.WHITE);
+//			numberPanel.add(textButtonArr[i]).setFont(font);
+//		} // for end
 		leftPanel.add(numberPanel, BorderLayout.CENTER);
 
 		enterButton.addActionListener(new ActionListener() {
@@ -443,17 +439,20 @@ public class Design extends JFrame implements ActionListener {
 				} else { // if has string input
 					String[] c = input.split("");
 
-					leftPanel.removeAll();
-					leftPanel.revalidate();
-					leftPanel.repaint();
-
-					numberPanel.removeAll();
-					numberPanel.revalidate();
-					numberPanel.repaint();
+					reset();
 
 					numberPanel.setBackground(Color.WHITE);
 					numberPanel.setLayout(new GridLayout(3, 3, 5, 5));
 
+					JPanel textPanel = new JPanel();
+					textPanel.setLayout(new FlowLayout());
+
+					JButton[] textButtonArr = new JButton[9]; // button array
+					JButton enterButton = new JButton("Enter"); // add enter button
+					enterButton.setBackground(Color.WHITE);
+					enterButton.setFont(font2);
+					
+					
 					for (int j = 0; j < c.length; j++) {
 						textButtonArr[j] = new JButton("" + c[j]);
 						textButtonArr[j].setBackground(Color.WHITE);
@@ -466,6 +465,8 @@ public class Design extends JFrame implements ActionListener {
 							numberPanel.add(textButtonArr[x]).setEnabled(false);
 						} // for end
 					} // if end
+					textPanel.add(textField);
+					textPanel.add(enterButton);
 					leftPanel.add(numberPanel, BorderLayout.CENTER);
 				} // if-else end
 			}
@@ -473,19 +474,63 @@ public class Design extends JFrame implements ActionListener {
 	} // designTextPad end
 
 	/**
-	 * Purpose
+	 * Purpose : if click start button
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
-		if (selectedDimension >= 2 && selectedLevel >= 2) { // if select dimension and level
-			startButton.setEnabled(true);// enable start button
+		
+		if(e.getSource()==newMenuItem) {
+			f.dispose(); //dispose frame
+			new GameController();
+		}
+		
+		if(e.getSource()==solutionMenuItem) {
+			JOptionPane.showMessageDialog(f, "solution?");
+		}
+		
+		if(e.getSource()==exitMenuItem)		{
+			System.exit(0); //exit the program
+		}
+		
+		if(e.getSource()==colorsMenuItem) { //change color in grid panel
 			
+		}
+		
+		if(e.getSource()==aboutMenuItem) {
+			JOptionPane.showMessageDialog(f, "About?");
+		}
+		
+		if(e.getSource()==typeComboBox) {
+			JComboBox cb = (JComboBox) e.getSource(); // get combo box
+			int index = cb.getSelectedIndex(); // get index number that user clicked
+			if (index == 0) { // if choose "Number"
+				startButton.setEnabled(true);
+			} else if (index == 1) { // if choose "Text"
+				startButton.setEnabled(true);
+				levelComboBox.setEnabled(false); // disable levelComboBox combo box
+				startButton.addActionListener(this);
+			} // if-else end
+		} //if end
+		
+		
+		if(e.getSource() == resetButton) { //if click reset button
+			timer.cancel();
+			timerTextArea.setFont(font2);
+			timerTextArea.setText("0");
+			
+			selectedDimension = 0;
+			selectedLevel = 0;
+			
+			reset();
+		} //if end
+		
+		if (selectedDimension >= 2 && selectedLevel >= 2 && typeComboBox.getSelectedIndex() == 0) { // if select dimension and level
+
 			if (e.getSource() == startButton) { // if click start button
-				
 				startGame();
 				getRandom();
 				designNumberPad();
+				startTimer();
 				
 			} // if end
 
@@ -498,14 +543,25 @@ public class Design extends JFrame implements ActionListener {
 						buttonCol = j;
 						designNumberPad();
 						if (gameOver()) { // if game over is true
-							JOptionPane.showMessageDialog(this, "Game Over");
+							GameController.dialogMessage(0);
+							timer.cancel(); //stop the timer
+							timerTextArea.setText("0");
+							timerTextArea.setFont(font2);
+							reset();
+							selectedDimension = 0;
+							selectedLevel = 0;
 						} // if end
 					} // if end
 				} // for end
 
 			} // for end
-		} // if end
-
+		} else if(typeComboBox.getSelectedIndex() == 1){ //if text pad
+			reset();
+			designTextPad();
+		} else { //if nothing chosen, error message
+//			GameController.dialogMessage(-1);
+		}// if end
+		
 	} // actionPerformed end
 
 	/**
@@ -523,5 +579,16 @@ public class Design extends JFrame implements ActionListener {
 		} // for end
 		return true;
 	} // gameOver end
+	/**
+	 * Purpose : 
+	 */
+	void reset() {
+		leftPanel.removeAll();
+		leftPanel.revalidate();
+		leftPanel.repaint();
 
+		numberPanel.removeAll();
+		numberPanel.revalidate();
+		numberPanel.repaint();
+	}
 } // Design class end

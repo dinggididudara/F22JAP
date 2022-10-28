@@ -14,6 +14,6 @@ package Main;
 public class Main {
 
 	public static void main(String[] args) {
-		new Design();
+		new GameController();
 	} //main end
 } //Main class end
