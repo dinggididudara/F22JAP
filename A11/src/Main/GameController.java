@@ -9,10 +9,10 @@
  * Purpose : Number Puzzle - main class
  */
 package Main;
-import Main.Design;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
@@ -28,12 +28,14 @@ import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
@@ -44,6 +46,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
 import java.util.Random;
+import java.util.TimerTask;
 
 /**
  * Class Name : GameController
@@ -54,26 +57,20 @@ import java.util.Random;
  *  @author Soomin
  *
  */
-public class GameController extends JFrame{
-//	Design design = new Design();
-	/**
-	 * default serial
-	 */
-	private static final long serialVersionUID = 1L;
-
+public class GameController {
 	/**
 	 * GameController : constructor
 	 */
 	GameController() {
-		Design design = new Design();
-		
+		new Design();
 	} //GameController
 	/**
-	 * 
+	 * dialogMessage
+	 * Purpose : show the dialog of the game process, 0 if succeed, 1 if end, -1 if error
+	 * @param status check the status of game process 
 	 */
 	static void dialogMessage(int status){
 		JDialog dialog = new JDialog();
-//		dialog.setUndecorated(true);
 		switch(status) {
 		case 0: //if succeed
 			JLabel label1 = new JLabel(new ImageIcon("C:/Users/dinggididudara/OneDrive/AC/22F/CST8221 Java Application Programming/Soomin113/A11/src/gamewinner.png"));
@@ -88,11 +85,10 @@ public class GameController extends JFrame{
 			dialog.add(label3);
 			break;
 		} //switch end
-		
-		
 		dialog.pack();
 		dialog.setVisible(true);
 	} //dialogMessage end
+	
 	} //main end
 	
 
