@@ -63,6 +63,7 @@ public class Design extends JFrame implements ActionListener {
 	JButton enterButton = new JButton("Enter"); // add enter button
 
 	JMenuItem newMenuItem = new JMenuItem("New");
+	JMenuItem serverMenuItem = new JMenuItem("Server");
 	JMenuItem solutionMenuItem = new JMenuItem("Solution");
 	JMenuItem exitMenuItem = new JMenuItem("Exit");
 
@@ -166,6 +167,7 @@ public class Design extends JFrame implements ActionListener {
 				"C:/Users/dinggididudara/OneDrive/AC/22F/CST8221 Java Application Programming/Soomin113/A11/src/iconabt.png"));
 
 		gameMenu.add(newMenuItem);
+		gameMenu.add(serverMenuItem);
 		gameMenu.add(solutionMenuItem);
 		gameMenu.addSeparator();
 		gameMenu.add(exitMenuItem);
@@ -178,6 +180,7 @@ public class Design extends JFrame implements ActionListener {
 		menuBar.add(helpMenu);
 
 		newMenuItem.addActionListener(this);
+		serverMenuItem.addActionListener(this);
 		solutionMenuItem.addActionListener(this);
 		exitMenuItem.addActionListener(this);
 
@@ -208,7 +211,7 @@ public class Design extends JFrame implements ActionListener {
 		radioButtonGroup.add(playButton); // make group for mode
 
 		// Design button is selected by default
-		modePanel.add(designButton); // add both panel to the frame
+		modePanel.add(designButton); // add both panel to the serverFrame
 		modePanel.add(playButton);
 		rightPanel.add(modePanel);
 
@@ -326,7 +329,7 @@ public class Design extends JFrame implements ActionListener {
 		resetButton.addActionListener(this);
 
 		// ******************************************************************add to
-		// frame
+		// serverFrame
 		f.add(leftPanel, BorderLayout.CENTER);
 		f.add(rightPanel, BorderLayout.EAST);
 
@@ -525,8 +528,13 @@ public class Design extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource() == newMenuItem) {
-			f.dispose(); // dispose frame
+			f.dispose(); // dispose serverFrame
 			new GameController();
+		}
+		
+		if (e.getSource() == serverMenuItem) {
+			f.dispose(); //close the main window
+			new ServerMain();
 		}
 
 		if (e.getSource() == solutionMenuItem) {
