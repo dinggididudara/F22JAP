@@ -8,7 +8,12 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.net.Socket;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -25,6 +30,8 @@ public class ServerMain extends Design implements ActionListener{
 	 */
 	private static final long serialVersionUID = 1L;
 	JFrame serverFrame = new JFrame("");
+	JPanel serverPanel = new JPanel();
+	
 	
 	JPanel topPanel = new JPanel(); // panel for top
 	JPanel middlePanel = new JPanel();
@@ -40,19 +47,19 @@ public class ServerMain extends Design implements ActionListener{
 	ImageIcon topImage = new ImageIcon(
 			"C:/Users/dinggididudara/OneDrive/AC/22F/CST8221 Java Application Programming/Soomin113/A11/src/N.jpg");
 	
-	JTextArea resultTextArea = new JTextArea(""); //text field for result
+	static JTextArea resultTextArea = new JTextArea(""); //text field for result
 	
 	
 	ServerMain(){
+		
 		serverFrame.setSize(900,300);
 		serverFrame.setTitle("Game Server");
-		
 		serverFrame.setResizable(false); //cannot change the window size
-		serverFrame.setLayout(new GridLayout(3,1,5,5));
 		serverFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		
 		serverFrame.getContentPane().setBackground(Color.WHITE);
 		
+		serverPanel.setLayout(new GridLayout(3,1,5,5));
+		serverPanel.setBorder(BorderFactory.createEmptyBorder(50,100,20,100)); //border for padding
 		//******top panel*******
 		topPanel.setLayout(new BorderLayout());
 		
@@ -62,7 +69,7 @@ public class ServerMain extends Design implements ActionListener{
 		JLabel imageLabel = new JLabel(changedIcon);
 		
 		topPanel.add(imageLabel, BorderLayout.CENTER); //put image on top
-		serverFrame.add(topPanel);
+		serverPanel.add(topPanel);
 		
 		
 		//********middle panel*****
@@ -87,7 +94,7 @@ public class ServerMain extends Design implements ActionListener{
 		middlePanel.add(resultBtn);
 		middlePanel.add(endBtn);
 		
-		serverFrame.add(middlePanel);
+		serverPanel.add(middlePanel);
 		
 		
 		//*******bottomPanel********
@@ -97,9 +104,10 @@ public class ServerMain extends Design implements ActionListener{
 		resultTextArea.setEditable(false); //cannot edit this text field
 		resultTextArea.setFont(font3); //set font
 		bottomPanel.add(resultTextArea, BorderLayout.CENTER); //add to bottom panel
-		serverFrame.add(bottomPanel);
+		serverPanel.add(bottomPanel);
 		
 		//********set frame visible
+		serverFrame.add(serverPanel);
 		serverFrame.setVisible(true);
 	} //server end
 	
@@ -113,7 +121,7 @@ public class ServerMain extends Design implements ActionListener{
 		}
 	} //is Number end
 	
-	void addResult(String str) {
+	static void addResult(String str) {
 		resultTextArea.append(str + "\n");
 		resultTextArea.setCaretPosition(resultTextArea.getDocument().getLength()); //position to last result line
 	}
@@ -128,22 +136,23 @@ public class ServerMain extends Design implements ActionListener{
 				addResult("Your Port Number is :" + portStr);
 				
 				Server server = new Server(); //start new server
-				server.start(port); //start server with port number
+				server.start(port, 0); //start server with port number
 				addResult("New Server!"); 
 				
 				Client client = new Client(); //new client
 				client.start(port);
 				addResult("New Client!");
-				
+				if (e.getSource() == endBtn) {
+					server.start(port, 1);
+					serverFrame.dispose(); // close the window
+				} // if end
 				
 			} else if (portTextField.getText() == null){ //if text field is null
 				addResult("Please enter port number");
 			} //if else end
 			
 		} //if end
-		
-		if(e.getSource() == endBtn) {
-			serverFrame.dispose(); //close the window
-		} //if end
 	} //actionPerformed end
-}
+} //serverMain class end
+
+
