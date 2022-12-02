@@ -71,6 +71,7 @@ public class ClientMain extends Design implements ActionListener{
 	
 	
 	ClientMain(){
+		f.dispose();
 		clientFrame.setSize(900,500);
 		clientFrame.setTitle("Game Client");
 		clientFrame.setResizable(false); //cannot change the window size

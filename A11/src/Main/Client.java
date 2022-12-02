@@ -1,8 +1,10 @@
 package Main;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -13,7 +15,7 @@ public class Client extends ClientMain implements Runnable {
 	 * default serial number
 	 */
 	private static final long serialVersionUID = 1L;
-	DataInputStream input;
+	InputStreamReader input;
 	PrintStream output;
 	Socket cSocket;
 	
@@ -22,8 +24,8 @@ public class Client extends ClientMain implements Runnable {
 	void start(int port, String serverName) {
 		try {
 			cSocket = new Socket(serverName, port);
-			input = new DataInputStream(cSocket.getInputStream());
-			output = new PrintStream(cSocket.getOutputStream(), true);
+			input = new InputStreamReader(cSocket.getInputStream());
+			BufferedReader b = new BufferedReader(input);
 
 			ArrayList<String> player = new ArrayList<>();
 			
@@ -35,7 +37,11 @@ public class Client extends ClientMain implements Runnable {
 			try {
 				output.println("Player: " + player.get(0) + "points: " + player.get(1) + "time: " + player.get(2));
 				addResult(output.toString());
+				String msg = b.readLine();
+				
+				output.println(msg);
 				output.flush();
+				
 				cSocket.close(); // close socket
 			} catch (IOException e) {
 				ServerMain.addResult("Error");

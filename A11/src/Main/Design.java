@@ -63,8 +63,8 @@ public class Design extends JFrame implements ActionListener {
 	JButton enterButton = new JButton("Enter"); // add enter button
 
 	JMenuItem newMenuItem = new JMenuItem("New");
-	JMenuItem serverMenuItem = new JMenuItem("Server");
-	JMenuItem clientMenuItem = new JMenuItem("Client");
+	JMenuItem serverMenuItem = new JMenuItem("Server/Client");
+	
 	JMenuItem solutionMenuItem = new JMenuItem("Solution");
 	JMenuItem exitMenuItem = new JMenuItem("Exit");
 
@@ -169,7 +169,7 @@ public class Design extends JFrame implements ActionListener {
 
 		gameMenu.add(newMenuItem);
 		gameMenu.add(serverMenuItem);
-		gameMenu.add(clientMenuItem);
+		
 		gameMenu.add(solutionMenuItem);
 		gameMenu.addSeparator();
 		gameMenu.add(exitMenuItem);
@@ -183,7 +183,6 @@ public class Design extends JFrame implements ActionListener {
 
 		newMenuItem.addActionListener(this);
 		serverMenuItem.addActionListener(this);
-		clientMenuItem.addActionListener(this);
 		solutionMenuItem.addActionListener(this);
 		exitMenuItem.addActionListener(this);
 
@@ -531,19 +530,16 @@ public class Design extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource() == newMenuItem) {
-			f.dispose(); // dispose serverFrame
+			f.dispose(); // dispose main window
 			new GameController();
 		}
 		
 		if (e.getSource() == serverMenuItem) {
 			f.dispose(); //close the main window
 			new ServerMain();
-		}
-		
-		if (e.getSource() == clientMenuItem) {
-			f.dispose(); //close the main window
 			new ClientMain();
 		}
+		
 
 		if (e.getSource() == solutionMenuItem) {
 			JOptionPane.showMessageDialog(f, "solution?");

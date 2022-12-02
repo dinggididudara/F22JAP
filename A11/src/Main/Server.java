@@ -1,7 +1,12 @@
 package Main;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -13,7 +18,8 @@ public class Server extends ServerMain implements Runnable{
 	ServerSocket sSocket; //empty the new server's socket
 	Socket socket; //port
 
-	InputStream input;
+	BufferedReader in;
+	PrintWriter out;
 	
 	public void start(int port, int a) {
 		try {
@@ -28,10 +34,11 @@ public class Server extends ServerMain implements Runnable{
 				socket.close();
 			}
 		} catch (IOException e) {
+			addResult("Server is already opened");
 			e.printStackTrace();
 		} finally {
 			try {
-				if(input != null) sSocket.close();
+				if(in != null) sSocket.close();
 				if(socket != null) socket.close();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -45,7 +52,17 @@ public class Server extends ServerMain implements Runnable{
 			try {
 				socket = sSocket.accept(); // accept 
 				addResult("Connecting "+socket.getInetAddress() + " at port " + socket.getPort());
-				input = socket.getInputStream(); // read client's message
+				in = new BufferedReader(new InputStreamReader(socket.getInputStream())); // read socket's message
+				out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())));
+				
+				String msg = null;
+				msg = in.readLine();
+				
+				addResult("Message from client: "+ msg);
+				
+				out.write(msg);
+				out.flush();
+				socket.close();
 			} catch (IOException e) {
 				ServerMain.addResult("Error!");
 			} //try catch end

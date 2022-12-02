@@ -51,7 +51,7 @@ public class ServerMain extends Design implements ActionListener{
 	
 	
 	ServerMain(){
-		
+		f.dispose();
 		serverFrame.setSize(900,300);
 		serverFrame.setTitle("Game Server");
 		serverFrame.setResizable(false); //cannot change the window size
@@ -141,9 +141,6 @@ public class ServerMain extends Design implements ActionListener{
 				server.start(port, 0); // start server with port number
 				addResult("New Server!");
 
-				Client client = new Client(); // new client
-				client.start(port, ClientMain.DEFAULT_USER);
-				addResult("New Client!");
 				if (e.getSource() == endBtn) {
 					server.start(port, 1);
 					serverFrame.dispose(); // close the window
