@@ -130,24 +130,26 @@ public class ServerMain extends Design implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==startBtn) {
 			addResult("You clicked Start button");
-			String portStr = portTextField.getText(); //save port number
-			if(isNumber(portStr)) {
-				int port = Integer.parseInt(portStr);//casting
+			if(!(portTextField.getText().equals(""))) { //if it is not empty
+
+				String portStr = portTextField.getText(); // save port number
+
+				int port = Integer.parseInt(portStr);// casting
 				addResult("Your Port Number is :" + portStr);
-				
-				Server server = new Server(); //start new server
-				server.start(port, 0); //start server with port number
-				addResult("New Server!"); 
-				
-				Client client = new Client(); //new client
-				client.start(port);
+
+				Server server = new Server(); // start new server
+				server.start(port, 0); // start server with port number
+				addResult("New Server!");
+
+				Client client = new Client(); // new client
+				client.start(port, ClientMain.DEFAULT_USER);
 				addResult("New Client!");
 				if (e.getSource() == endBtn) {
 					server.start(port, 1);
 					serverFrame.dispose(); // close the window
 				} // if end
 				
-			} else if (portTextField.getText() == null){ //if text field is null
+			} else { //if text field is empty
 				addResult("Please enter port number");
 			} //if else end
 			
