@@ -7,66 +7,66 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server extends ServerMain implements Runnable{
-	/**
-	 * default serial id
-	 */
-	private static final long serialVersionUID = 1L;
-	ServerSocket sSocket; //empty the new server's socket
-	Socket socket; //port
+public class Server {
+	ServerSocket sSocket; // empty the new server's client
+	Socket client; // port
+	Thread newClient;
 
-	BufferedReader in;
-	PrintWriter out;
-	
-	public void start(int port, int a) {
+	BufferedReader read;
+	BufferedReader input;
+	PrintWriter output;
+
+	public void start(int port) {
 		try {
 			sSocket = new ServerSocket(port); // set port number
-			if(a==0) { //if start
-				Thread newClient = new Thread(new Server()); //new thread for server
-				newClient.start(); //start thread
-				
-
-			} else if (a == 1) { //if close
-				sSocket.close();
-				socket.close();
-			}
+			ServerMain.addResult("Server: " + InetAddress.getLocalHost().getHostAddress());
+			newClient = new Thread(new startClient()); // new thread for server
+			newClient.start(); // start thread
 		} catch (IOException e) {
-			addResult("Server is already opened");
+			ServerMain.addResult("Server is already opened");
 			e.printStackTrace();
 		} finally {
 			try {
-				if(in != null) sSocket.close();
-				if(socket != null) socket.close();
+				if (read != null)
+					sSocket.close();
+				if (client != null)
+					client.close();
 			} catch (IOException e) {
+				ServerMain.addResult("Error in Server");
 				e.printStackTrace();
-			} //try catch end
-		} //try catch end
-		
-	} //start end
+			} // try catch end
+		} // try catch end
 
-	@Override
-	public void run() {
+	} // start end
+
+	void getMessage() {
+		while (true) {
 			try {
-				socket = sSocket.accept(); // accept 
-				addResult("Connecting "+socket.getInetAddress() + " at port " + socket.getPort());
-				in = new BufferedReader(new InputStreamReader(socket.getInputStream())); // read socket's message
-				out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())));
-				
-				String msg = null;
-				msg = in.readLine();
-				
-				addResult("Message from client: "+ msg);
-				
-				out.write(msg);
-				out.flush();
-				socket.close();
+				ServerMain.addResult("New Message: " + read.readLine());
 			} catch (IOException e) {
-				ServerMain.addResult("Error!");
-			} //try catch end
-			
-	} //run end
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 
-} //Server end
+	private class startClient implements Runnable {
+		@Override
+		public void run() {
+			try {
+				client = sSocket.accept(); // accept
+				ServerMain.addResult("Connecting " + client.getInetAddress() + " at port " + client.getPort());
+				read = new BufferedReader(new InputStreamReader(client.getInputStream())); // read client's message
+
+				ServerMain.addResult("Message from client: " + read.readLine());
+				client.close();// close client
+			} catch (IOException e) {
+				// TODO: handle exception
+			}
+		}
+	}
+} // Server end

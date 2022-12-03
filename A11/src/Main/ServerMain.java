@@ -19,6 +19,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
@@ -47,19 +48,21 @@ public class ServerMain extends Design implements ActionListener{
 	ImageIcon topImage = new ImageIcon(
 			"C:/Users/dinggididudara/OneDrive/AC/22F/CST8221 Java Application Programming/Soomin113/A11/src/N.jpg");
 	
-	static JTextArea resultTextArea = new JTextArea(""); //text field for result
-	
-	
+	static JTextArea resultTextArea = new JTextArea(); //text field for result
+	JScrollPane sscrollPane = new JScrollPane(resultTextArea);
+	/**
+	 * ServerMain() : set up the frame for server side and start new server with user input port
+	 */
 	ServerMain(){
 		f.dispose();
-		serverFrame.setSize(900,300);
+		serverFrame.setSize(900,400);
 		serverFrame.setTitle("Game Server");
 		serverFrame.setResizable(false); //cannot change the window size
 		serverFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		serverFrame.getContentPane().setBackground(Color.WHITE);
 		
 		serverPanel.setLayout(new GridLayout(3,1,5,5));
-		serverPanel.setBorder(BorderFactory.createEmptyBorder(50,100,20,100)); //border for padding
+		serverPanel.setBorder(BorderFactory.createEmptyBorder(50,100,10,100)); //border for padding
 		//******top panel*******
 		topPanel.setLayout(new BorderLayout());
 		
@@ -79,11 +82,11 @@ public class ServerMain extends Design implements ActionListener{
 		middlePanel.add(portTextField);
 		
 		startBtn.setFont(font3);
-		endBtn.setFont(font3);
 		resultBtn.setFont(font3);
+		endBtn.setFont(font3);
 		
 		startBtn.setBackground(Color.WHITE);
-		resultBtn.setBackground(Color.GRAY);
+		resultBtn.setBackground(Color.LIGHT_GRAY);
 		endBtn.setBackground(Color.WHITE);
 		
 		startBtn.addActionListener(this);
@@ -103,54 +106,49 @@ public class ServerMain extends Design implements ActionListener{
 		bottomPanel.setBorder(new TitledBorder(new LineBorder(Color.BLACK, 3), "Result")); // set border for mode
 		resultTextArea.setEditable(false); //cannot edit this text field
 		resultTextArea.setFont(font3); //set font
-		bottomPanel.add(resultTextArea, BorderLayout.CENTER); //add to bottom panel
+		bottomPanel.add(sscrollPane, BorderLayout.CENTER); //add to bottom panel
 		serverPanel.add(bottomPanel);
 		
 		//********set frame visible
 		serverFrame.add(serverPanel);
 		serverFrame.setVisible(true);
 	} //server end
-	
-	boolean isNumber(String s) {
-		try {
-			Integer.parseInt(s); //casting
-			return true;
-		} catch (NumberFormatException e) {
-			addResult("Please Enter Number");
-			return false;
-		}
-	} //is Number end
-	
+/**
+ * addResult : add the result log in the result text field	
+ * @param str message want to show in the frame
+ */
 	static void addResult(String str) {
 		resultTextArea.append(str + "\n");
 		resultTextArea.setCaretPosition(resultTextArea.getDocument().getLength()); //position to last result line
 	}
-	
+	/**
+	 * actionPerformed : handle all actions including button click
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		String portStr = portTextField.getText(); // save port number
+		int port = Integer.parseInt(portStr);// casting
 		if(e.getSource()==startBtn) {
 			addResult("You clicked Start button");
 			if(!(portTextField.getText().equals(""))) { //if it is not empty
-
-				String portStr = portTextField.getText(); // save port number
-
-				int port = Integer.parseInt(portStr);// casting
 				addResult("Your Port Number is :" + portStr);
-
 				Server server = new Server(); // start new server
-				server.start(port, 0); // start server with port number
-				addResult("New Server!");
-
-				if (e.getSource() == endBtn) {
-					server.start(port, 1);
-					serverFrame.dispose(); // close the window
-				} // if end
-				
+				server.start(port); // start server with port number
+				addResult("New Server Activate Now!");
+				if (e.getSource() == resultBtn) {
+					server.getMessage();
+				}
 			} else { //if text field is empty
 				addResult("Please enter port number");
 			} //if else end
-			
 		} //if end
+		//if click end button, close the window
+		if (e.getSource() == endBtn) {
+			addResult("Disconnecting from port "+portStr);
+			serverFrame.dispose();
+		} // if end
+		
+		
 	} //actionPerformed end
 } //serverMain class end
 

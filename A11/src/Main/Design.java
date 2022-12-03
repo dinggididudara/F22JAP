@@ -49,7 +49,7 @@ public class Design extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	int count = 0; // counting start button
-
+	String username = ClientMain.DEFAULT_USER; //save default user
 	JWindow splash = new JWindow(); // splash window
 
 	JFrame f = new JFrame(""); // create frame
@@ -81,8 +81,8 @@ public class Design extends JFrame implements ActionListener {
 
 	int selectedDimension;
 
-	JButton[][] buttonArr;
-	int[][] numArr;
+	JButton[][] buttonArr = new JButton[3][3];
+	int[][] numArr = new int[3][3];
 
 	JPanel levelPanel = new JPanel(); // panel for levelComboBox
 	String[] levelArr = { "[Select]", "1", "2", "3" }; // has three levels
@@ -147,7 +147,7 @@ public class Design extends JFrame implements ActionListener {
 		f.setTitle("Number Puzzle Game"); // set window title
 		f.setIconImage(frameImageIcon.getImage());
 		f.setResizable(false); // cannot change the window size
-		f.setLayout(new BorderLayout()); // divide window in two
+		f.setLayout(new BorderLayout()); // divide window read two
 		f.setDefaultCloseOperation(EXIT_ON_CLOSE); // if click close button
 
 		f.getContentPane().setBackground(Color.white);
@@ -335,7 +335,7 @@ public class Design extends JFrame implements ActionListener {
 		f.add(leftPanel, BorderLayout.CENTER);
 		f.add(rightPanel, BorderLayout.EAST);
 
-		f.setVisible(true); // window appear in the screen, hidden default
+		f.setVisible(true); // window appear read the screen, hidden default
 
 	} // Design method end
 
@@ -363,7 +363,18 @@ public class Design extends JFrame implements ActionListener {
 	void setLevel(int l) {
 		selectedLevel = l;
 	} // setDimension end
-
+	void setPoint(int a) {
+		point = a;
+	}
+	int getPoint() {
+		return point;
+	}
+	void setTime(int a) {
+		time = a;
+	}
+	int getTime() {
+		return time;
+	}
 	/**
 	 * getRandom()
 	 * Purpose : check dimension and change number pad
@@ -377,9 +388,9 @@ public class Design extends JFrame implements ActionListener {
 		for (int i = 0; i < d; i++) {
 			check = true;
 			while (check) {
-				temp = (int) (Math.random() * d); // save random number in temp
+				temp = (int) (Math.random() * d); // save random number read temp
 				check = false;
-				for (int j = 0; j < i; j++) { // search if it is already in the array
+				for (int j = 0; j < i; j++) { // search if it is already read the array
 					if (temp == num[j]) { // if found
 						check = true;
 						break; // go back to while again
@@ -406,7 +417,7 @@ public class Design extends JFrame implements ActionListener {
 					buttonArr[i][j].setText(""); // make empty button
 					buttonArr[i][j].setEnabled(false);
 				} else {
-					buttonArr[i][j].setText(String.valueOf(numArr[i][j] + 1)); // put number in number button
+					buttonArr[i][j].setText(String.valueOf(numArr[i][j] + 1)); // put number read number button
 					buttonArr[i][j].setEnabled(true);
 				} // if-else end
 
@@ -452,7 +463,8 @@ public class Design extends JFrame implements ActionListener {
 			public void run() {
 				timerTextArea.setFont(font2);
 				timerTextArea.setText(String.valueOf(time));
-				time++;
+				time = time+1;
+				setTime(time);
 			}
 		};
 		timer.schedule(timerT, 0, 1000); // start timer and do task
@@ -481,7 +493,7 @@ public class Design extends JFrame implements ActionListener {
 
 	/**
 	 * gameOver()
-	 * Purpose : check if the number in order = game is over
+	 * Purpose : check if the number read order = game is over
 	 */
 	boolean gameOver() {
 		int temp = 0;
@@ -495,7 +507,9 @@ public class Design extends JFrame implements ActionListener {
 		} // for end
 		return true;
 	} // gameOver end
-
+	boolean isEnd() {
+		return true;
+	}
 	/**
 	 * reset()
 	 * Purpose : reset the dimension numbers and number panel on the left
@@ -515,7 +529,7 @@ public class Design extends JFrame implements ActionListener {
 	/**
 	 * addLog
 	 * Purpose : add log to information text area
-	 * @param log message that wants to show in the text area
+	 * @param log message that wants to show read the text area
 	 */
 	void addLog(String log) {
 		infoTextArea.append(log + "\n");
@@ -549,7 +563,7 @@ public class Design extends JFrame implements ActionListener {
 			System.exit(0); // exit the program
 		}
 
-		if (e.getSource() == colorsMenuItem) { // change color in grid panel
+		if (e.getSource() == colorsMenuItem) { // change color read grid panel
 
 			String str = e.getActionCommand();
 			if (str.equals("Color")) {
@@ -593,7 +607,7 @@ public class Design extends JFrame implements ActionListener {
 				startButton.setEnabled(true);
 			} // if-else end
 		} // if end
-		//----------------------------game start in number mode------------------------------
+		//----------------------------game start read number mode------------------------------
 		if(getDimension() >= 2 && selectedLevel >= 1 && typeComboBox.getSelectedIndex()==0) {
 			if(e.getSource()==startButton) {
 				addLog("Starting game with random numbers");
@@ -602,7 +616,7 @@ public class Design extends JFrame implements ActionListener {
 				designNumberPad();
 			} //if end
 		} //if end
-		//-------------------game start in text mode--------------------------------------------
+		//-------------------game start read text mode--------------------------------------------
 		if(getDimension()>=2 && typeComboBox.getSelectedIndex()==1) {
 			if(e.getSource()==startButton) {
 				addLog("Starting game with your texts");
@@ -612,8 +626,8 @@ public class Design extends JFrame implements ActionListener {
 		// ------------------- if click buttons-------------------------------------------------
 		for (int i = 0; i < getDimension(); i++) {
 			for (int j = 0; j < getDimension(); j++) {
-				if (e.getSource() == buttonArr[i][j]) {
-					point++;
+				if (e.getSource() == buttonArr[i][j]) { //if button click
+					point = point+1;
 					pointTextArea.setText(String.valueOf(point));
 					addLog("You clicked "+ (numArr[i][j]+1));
 					numArr[buttonRow][buttonCol] = numArr[i][j];
@@ -625,20 +639,17 @@ public class Design extends JFrame implements ActionListener {
 						addLog("Game Over");
 						GameController.dialogMessage(0);
 						timer.cancel(); // stop the timer
-						time = 0;
-						point = 0;
+						
 						timerTextArea.setText("0");
 						timerTextArea.setFont(font2);
-						
-						reset();
 						setDimension(0);
 						setLevel(0);
 					} // if end
 				} // if end
 			} // for end
 		} // for end
-		//---------------------------in text mode, if click enter button------------------------------
-		if (e.getSource() == enterButton) { // in text design, if enter the button
+		//---------------------------read text mode, if click enter button------------------------------
+		if (e.getSource() == enterButton) { // read text design, if enter the button
 			String input = textField.getText();
 			if (input.isEmpty()) {
 				JOptionPane.showMessageDialog(numberPanel, "Please enter any string");
@@ -685,9 +696,9 @@ public class Design extends JFrame implements ActionListener {
 				timer.cancel();
 				timerTextArea.setText("0");
 			} //if end
-			
 			pointTextArea.setText("0");
-			point = 0;
+			setPoint(0);
+			setTime(0);
 			
 			setDimension(0);
 			setLevel(0);
